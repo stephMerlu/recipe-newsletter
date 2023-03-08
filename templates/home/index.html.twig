@@ -17,5 +17,10 @@
         <li>Nom d'utilisateur : {{user.username}}, email : {{user.email}}, inscrit à la newsletter : {{user.isSubscribed ? 'oui' : 'non'}}</li>
         {% endfor %}
     </ul>
+    <ul>
+        {% for ingredient in ingredients %}
+        <li>Nom de l'ingrédient : {{ingredient.name}}, type : {{ingredient.type}}, description : {{ingredient.description}}</li>
+        {% endfor %}
+    </ul>
 </div>
 {% endblock %}

@@ -34,25 +34,12 @@ class AppFixtures extends Fixture
             ->setPassword("test".$i)
             ->setIsSubscribed($faker->boolean())
             ->setRoles(['ROLE_USER'])
+
         ;
         $users[]= $user;
         $manager->persist($user);
     }
 
-    $ingredients=[];
-    for ($i = 0; $i<10; $i++) {
-        $ingredient = new Ingredient();
-
-        $ingredient
-            ->setName($faker->word())
-            ->setType($faker->randomElement(['fruit', 'legume']))
-            ->setDescription($faker->text())
-            ->setImage($faker->imageUrl(640, 480, 'food', true))
-        ;
-
-        $manager->persist($ingredient);
-        $ingredients[]=$ingredient;
-}
         $summerStart = new \DateTimeImmutable('2023-06-21');
         $fallStart = new \DateTimeImmutable('2023-09-23');
         $springStart = new \DateTimeImmutable('2023-03-20');
@@ -92,6 +79,22 @@ class AppFixtures extends Fixture
 
         $seasons = [$summer,$spring,$winter,$fall];
 
+        $ingredients=[];
+        for ($i = 0; $i<10; $i++) {
+            $ingredient = new Ingredient();
+    
+            $ingredient
+                ->setName($faker->word())
+                ->setType($faker->randomElement(['fruit', 'legume']))
+                ->setDescription($faker->text())
+                ->setImage($faker->imageUrl(640, 480, 'food', true))
+                ->addSeason($faker->randomElement($seasons))
+            ;
+    
+            $manager->persist($ingredient);
+            $ingredients[]=$ingredient;
+    }
+
         $recipes=[];
         for ($i = 0; $i<10; $i++) {
             $recipe = new Recipe();
@@ -102,6 +105,7 @@ class AppFixtures extends Fixture
                 ->setLevel($faker->numberBetween(1, 3))
                 ->setImage($faker->imageUrl(640, 480, 'recipe', true))
                 ->addSeason($faker->randomElement($seasons))
+                ->addUser($faker->randomElement($users))
             ;
             $recipes[]= $recipe;
             $manager->persist($recipe);
@@ -146,9 +150,11 @@ class AppFixtures extends Fixture
             ->setQuantity($faker->randomDigitNotNull() . ' ' . $faker->randomElement((['kg', 'g', 'l', 'ml'])))
         ;
         $manager->persist($recipeIngredient);
-        $recipeIngredient[] = $recipeIngredient;
+        $recipeIngredients[] = $recipeIngredient;
 
         }
+
+
 
         $manager->flush();
     }
